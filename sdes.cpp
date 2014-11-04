@@ -1,8 +1,5 @@
 /*
  * Frederic Marchand
- * 100817579
- * Comp4109
- * S-DES
  */
 
 #include <string.h>
