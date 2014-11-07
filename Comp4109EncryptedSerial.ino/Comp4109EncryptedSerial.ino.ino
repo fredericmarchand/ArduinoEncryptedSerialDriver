@@ -3,8 +3,7 @@
 //On receive transmit the inverse
 //Print encryption step on console
 
-String inputString = "";         // a string to hold incoming data
-boolean stringComplete = false;  // whether the string is complete
+String inputString = "";
 
 void setup() {
   Serial.begin(9600);
@@ -13,8 +12,8 @@ void setup() {
 
 void loop() 
 {
-  delay(5000); 
-  Serial.write("Hello World\r\n");
+  delay(5000);
+  Serial.write("Random Text\r\n");
 }
 
 
