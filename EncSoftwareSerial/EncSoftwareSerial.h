@@ -1,5 +1,5 @@
 /*
-SoftwareSerial.h (formerly NewSoftSerial.h) - 
+EncSoftwareSerial.h (formerly NewSoftSerial.h) - 
 Multi-instance software serial library for Arduino/Wiring
 -- Interrupt-driven receive and other improvements by ladyada
    (http://ladyada.net)
@@ -25,12 +25,12 @@ The latest version of this library can always be found at
 http://arduiniana.org.
 */
 
-#ifndef SoftwareSerial_h
-#define SoftwareSerial_h
+#ifndef EncSoftwareSerial_h
+#define EncSoftwareSerial_h
 
 #include <inttypes.h>
 #include <Stream.h>
-
+#include "DES.h"
 /******************************************************************************
 * Definitions
 ******************************************************************************/
@@ -40,7 +40,7 @@ http://arduiniana.org.
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #endif
 
-class SoftwareSerial : public Stream
+class EncSoftwareSerial : public Stream
 {
 private:
   // per object data
@@ -57,12 +57,14 @@ private:
 
   uint16_t _buffer_overflow:1;
   uint16_t _inverse_logic:1;
+  char key[8];
+  DES des;
 
   // static data
   static char _receive_buffer[_SS_MAX_RX_BUFF]; 
   static volatile uint8_t _receive_buffer_tail;
   static volatile uint8_t _receive_buffer_head;
-  static SoftwareSerial *active_object;
+  static EncSoftwareSerial *active_object;
 
   // private methods
   void recv();
@@ -76,8 +78,8 @@ private:
 
 public:
   // public methods
-  SoftwareSerial(uint8_t receivePin, uint8_t transmitPin, bool inverse_logic = false);
-  ~SoftwareSerial();
+  EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, char *key, bool inverse_logic = false);
+  ~EncSoftwareSerial();
   void begin(long speed);
   bool listen();
   void end();
@@ -87,10 +89,32 @@ public:
 
   virtual size_t write(uint8_t byte);
   virtual int read();
+  virtual int blockRead(char *outputBuffer);
   virtual int available();
   virtual void flush();
   
-  using Print::write;
+	size_t write(const char *buffer, size_t size)
+	{
+    uint8_t tempSize = size;
+    while ((tempSize % 8) != 0)
+    {
+      tempSize++;
+    }
+
+    char plain[tempSize];
+    char cipher[tempSize];
+    memset(plain, '0', tempSize);
+    strncpy(plain, buffer, size);
+
+    char *pCipher = &cipher[0];
+    des.tripleDESEncrypt(cipher, plain, key, key, key);
+	  size_t n = 0;
+	  while (tempSize--) 
+    {
+		  n += write(*pCipher++);
+	  }
+	  return n;
+	}
 
   // public only for easy access by interrupt handlers
   static inline void handle_interrupt();
