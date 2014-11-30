@@ -95,7 +95,7 @@ public:
   
 	size_t write(const char *buffer, size_t size)
 	{
-    uint8_t tempSize = size;
+    uint32_t tempSize = size;
     while ((tempSize % 8) != 0)
     {
       tempSize++;
