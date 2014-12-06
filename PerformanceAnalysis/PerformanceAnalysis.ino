@@ -28,6 +28,7 @@ void setup()
     des.generateKey(key1);
     des.generateKey(key2);
     des.generateKey(key3);
+    des = DES(key1, key2, key3);
     index = 0;
 }
 
@@ -41,7 +42,7 @@ void loop()
   generateRandomBlocks(input, blocks);
  
   time_a = micros();
-  des.tripleDESEncrypt(output, input, key1, key2, key3);
+  des.tripleDESEncrypt(output, input);
   time_b = micros();
   
   total_time_ticks = (time_b - time_a);

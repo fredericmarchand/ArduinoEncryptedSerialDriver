@@ -1,7 +1,5 @@
 #include <SoftwareSerial.h>
-#include <des.h>
 
-DES des;
 int blocks;
 unsigned long total_time_ticks;
 unsigned long time_a;

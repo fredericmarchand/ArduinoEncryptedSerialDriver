@@ -2,7 +2,6 @@
 
 #include <des.h>
 
-
 EncSoftwareSerial mySerial(10, 11, "ABCDEFGH"); // RX, TX
 char cipher[64];
 char plain[64];
