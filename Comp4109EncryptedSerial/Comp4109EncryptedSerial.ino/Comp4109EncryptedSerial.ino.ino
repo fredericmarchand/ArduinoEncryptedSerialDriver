@@ -1,5 +1,7 @@
-#include <des.h>
 #include <EncSoftwareSerial.h>
+
+#include <des.h>
+
 
 EncSoftwareSerial mySerial(10, 11, "ABCDEFGH"); // RX, TX
 char cipher[64];
@@ -9,6 +11,7 @@ DES des;
 void setup() {
   Serial.begin(9600);
   mySerial.begin(9600); 
+  des = DES("ABCDEFGH");
 }
 
 void loop() {
@@ -29,7 +32,7 @@ void loop() {
   if (charCount == 24)
   {
      Serial.println(cipher);
-     des.tripleDESDecrypt(plain, cipher, "ABCDEFGH", "ABCDEFGH", "ABCDEFGH");
+     des.tripleDESDecrypt(plain, cipher);
      for (int i = 0; i < 24; ++i)
      {
        if (plain[i] != '0')
@@ -42,7 +45,7 @@ void loop() {
   if (charCount == 16)
   {
      Serial.println(cipher);
-     des.tripleDESDecrypt(plain, cipher, "ABCDEFGH", "ABCDEFGH", "ABCDEFGH");
+     des.tripleDESDecrypt(plain, cipher);
      for (int i = 0; i < 16; ++i)
      {
        if (plain[i] != '0')
@@ -55,7 +58,7 @@ void loop() {
   if (charCount == 8)
   {
      Serial.println(cipher);
-     des.tripleDESDecrypt(plain, cipher, "ABCDEFGH", "ABCDEFGH", "ABCDEFGH");
+     des.tripleDESDecrypt(plain, cipher);
      for (int i = 0; i < 8; ++i)
      {
        if (plain[i] != '0')

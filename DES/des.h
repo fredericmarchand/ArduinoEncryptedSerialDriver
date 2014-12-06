@@ -11,17 +11,24 @@ private:
         char k[6]; 
     };
 
+	char key1[8];
+	char key2[8];
+	char key3[8];
+	
     void encryptBlock(char *plaintext, char *finalCiphertext,  KeySet *keyset, char mode);
     void generateSubKeys(const char *key, KeySet *keyset);
 
 public: 
 
-    DES();
+	DES();
+    DES(char *newkey1);
+	DES(char *newkey1, char *newkey2);
+	DES(char *newkey1, char *newkey2, char *newkey3);
     ~DES();
-    void DESEncrypt(char *ciphertext, char *plaintext, char *key);
-    void DESDecrypt(char *plaintext, char *ciphertext, char *key);
-    void tripleDESEncrypt(char *ciphertext, char *plaintext, char *key1, char *key2, char *key3);
-    void tripleDESDecrypt(char *plaintext, char *ciphertext, char *key1, char *key2, char *key3);
+    void DESEncrypt(char *ciphertext, char *plaintext);
+    void DESDecrypt(char *plaintext, char *ciphertext);
+    void tripleDESEncrypt(char *ciphertext, char *plaintext);
+    void tripleDESDecrypt(char *plaintext, char *ciphertext);
     void generateKey(char* key); 
 
 };

@@ -326,9 +326,9 @@ ISR(PCINT3_vect)
 #endif
 
 //
-// Constructor
+// Constructors
 //
-EncSoftwareSerial::EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, char *newKey, bool inverse_logic /* = false */) : 
+EncSoftwareSerial::EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, char *key1, bool inverse_logic /* = false */) : 
   _rx_delay_centering(0),
   _rx_delay_intrabit(0),
   _rx_delay_stopbit(0),
@@ -338,7 +338,33 @@ EncSoftwareSerial::EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, ch
 {
   setTX(transmitPin);
   setRX(receivePin);
-  strncpy(key, newKey, 8);
+  des = new DES(key1);
+}
+
+EncSoftwareSerial::EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, char *key1, char *key2, bool inverse_logic /* = false */) : 
+  _rx_delay_centering(0),
+  _rx_delay_intrabit(0),
+  _rx_delay_stopbit(0),
+  _tx_delay(0),
+  _buffer_overflow(false),
+  _inverse_logic(inverse_logic)
+{
+  setTX(transmitPin);
+  setRX(receivePin);
+  des = new DES(key1, key2);
+}
+
+EncSoftwareSerial::EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, char *key1, char *key2, char *key3, bool inverse_logic /* = false */) : 
+  _rx_delay_centering(0),
+  _rx_delay_intrabit(0),
+  _rx_delay_stopbit(0),
+  _tx_delay(0),
+  _buffer_overflow(false),
+  _inverse_logic(inverse_logic)
+{
+  setTX(transmitPin);
+  setRX(receivePin);
+  des = new DES(key1, key2, key3);
 }
 
 //
@@ -346,6 +372,7 @@ EncSoftwareSerial::EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, ch
 //
 EncSoftwareSerial::~EncSoftwareSerial()
 {
+  delete des;
   end();
 }
 

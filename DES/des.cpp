@@ -136,6 +136,30 @@ char IV[] = {0,1,0,0,0,0,0,1,0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,1,0,1,0,0,0,1,0,0,0,1
 
 DES::DES()
 {
+	memset(key1, '\0', 8);
+	memset(key2, '\0', 8);
+	memset(key3, '\0', 8);
+}
+
+DES::DES(char *newkey1)
+{
+	strncpy(key1, newkey1, 8);
+	strncpy(key2, newkey1, 8);
+	strncpy(key3, newkey1, 8);
+}
+
+DES::DES(char *newkey1, char *newkey2)
+{
+	strncpy(key1, newkey1, 8);
+	strncpy(key2, newkey2, 8);
+	strncpy(key3, newkey1, 8);
+}
+
+DES::DES(char *newkey1, char *newkey2, char *newkey3)
+{
+	strncpy(key1, newkey1, 8);
+	strncpy(key2, newkey2, 8);
+	strncpy(key3, newkey3, 8);
 }
 
 DES::~DES()
@@ -457,10 +481,10 @@ void DES::encryptBlock(char *plaintext, char *finalCiphertext,  KeySet *keyset, 
     inverseInitialPermutation(ciphertext, finalCiphertext);
 }
 
-void DES::DESEncrypt(char *ciphertext, char *plaintext, char *key)
+void DES::DESEncrypt(char *ciphertext, char *plaintext)
 {
     //Make sure the size of the output buffer is long enough
-    if (plaintext == NULL || ciphertext == NULL || key == NULL || ((strlen(plaintext) % 8) != 0))
+    if (plaintext == NULL || ciphertext == NULL || key1 == NULL || ((strlen(plaintext) % 8) != 0))
         return;
 
     KeySet keyset[16];
@@ -468,7 +492,7 @@ void DES::DESEncrypt(char *ciphertext, char *plaintext, char *key)
     char inputBits[(BLOCK_SIZE * totalBlocks)];
     char outputBits[(BLOCK_SIZE * totalBlocks)];
     char outBlock[BLOCK_SIZE];
-    generateSubKeys(key, keyset);
+    generateSubKeys(key1, keyset);
     
     byteArrayToBitArray(plaintext, inputBits, (totalBlocks * BLOCK_SIZE), 8);
 #if DEBUG == 2
@@ -506,10 +530,10 @@ void DES::DESEncrypt(char *ciphertext, char *plaintext, char *key)
 #endif
 }
 
-void DES::DESDecrypt(char *plaintext, char *ciphertext, char *key)
+void DES::DESDecrypt(char *plaintext, char *ciphertext)
 {
     //Make sure the size of the output buffer is long enough
-    if (plaintext == NULL || ciphertext == NULL || key == NULL || ((strlen(plaintext) % 8) != 0))
+    if (plaintext == NULL || ciphertext == NULL || key1 == NULL || ((strlen(plaintext) % 8) != 0))
         return;
 
     KeySet keyset[16];
@@ -518,7 +542,7 @@ void DES::DESDecrypt(char *plaintext, char *ciphertext, char *key)
     char outputBits[(BLOCK_SIZE * totalBlocks)];
     char outBlock[BLOCK_SIZE];
         
-    generateSubKeys(key, keyset);
+    generateSubKeys(key1, keyset);
         
     byteArrayToBitArray(ciphertext, inputBits, (totalBlocks * BLOCK_SIZE), 8);
 
@@ -557,7 +581,7 @@ void DES::DESDecrypt(char *plaintext, char *ciphertext, char *key)
 #endif
 }
 
-void DES::tripleDESEncrypt(char *ciphertext, char *plaintext, char *key1, char *key2, char *key3)
+void DES::tripleDESEncrypt(char *ciphertext, char *plaintext)
 {
     //Make sure the size of the output buffer is long enough
     if (plaintext == NULL || ciphertext == NULL || key1 == NULL || key2 == NULL || key3 == NULL || ((strlen(plaintext) % 8) != 0))
@@ -616,7 +640,7 @@ void DES::tripleDESEncrypt(char *ciphertext, char *plaintext, char *key1, char *
 #endif
 }
 
-void DES::tripleDESDecrypt(char *plaintext, char *ciphertext, char *key1, char *key2, char *key3)
+void DES::tripleDESDecrypt(char *plaintext, char *ciphertext)
 {
     //Make sure the size of the output buffer is long enough
     if (plaintext == NULL || ciphertext == NULL || key1 == NULL || key2 == NULL || key3 == NULL || ((strlen(plaintext) % 8) != 0))

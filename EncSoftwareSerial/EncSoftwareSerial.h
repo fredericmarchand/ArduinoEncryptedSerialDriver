@@ -57,8 +57,7 @@ private:
 
   uint16_t _buffer_overflow:1;
   uint16_t _inverse_logic:1;
-  char key[8];
-  DES des;
+  DES *des;
 
   // static data
   static char _receive_buffer[_SS_MAX_RX_BUFF]; 
@@ -78,7 +77,9 @@ private:
 
 public:
   // public methods
-  EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, char *key, bool inverse_logic = false);
+  EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, char *key1, bool inverse_logic = false);
+  EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, char *key1, char *key2, bool inverse_logic = false);
+  EncSoftwareSerial(uint8_t receivePin, uint8_t transmitPin, char *key1, char *key2, char *key3, bool inverse_logic = false);
   ~EncSoftwareSerial();
   void begin(long speed);
   bool listen();
@@ -107,7 +108,7 @@ public:
     strncpy(plain, buffer, size);
 
     char *pCipher = &cipher[0];
-    des.tripleDESEncrypt(cipher, plain, key, key, key);
+    des->tripleDESEncrypt(cipher, plain);
 	  size_t n = 0;
 	  while (tempSize--) 
     {

@@ -1,7 +1,6 @@
 #include <EncSoftwareSerial.h>
 #include <des.h>
 
-DES des;
 EncSoftwareSerial mySerial(10, 11, "ABCDEFGH"); // RX, TX
 
 void setup() {
